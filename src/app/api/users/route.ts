@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
-import pool from "@/app/libs/mysql";
+import query from "@/app/lib/mysql";
 
-export async function GET() {
+export async function GET(req: Request): Promise<NextResponse> {
     try {
-        const db = await pool.getConnection()
-        const query = 'select * from users'
-        const [rows] = await db.execute(query)
-        db.release()
-
-        return NextResponse.json(rows)
+        const queryResult = await query("SELECT * FROM customers", []);
+        return NextResponse.json(queryResult);
     } catch (error) {
-        return NextResponse.json({
-            error: error
-        }, { status: 500 })
+        if (error instanceof Error) {
+            // Handle known error type
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        } else {
+            // Handle unknown error type
+            return NextResponse.json({ error: 'An unknown error occurred' }, { status: 500 });
+        }
     }
-}
+}   
