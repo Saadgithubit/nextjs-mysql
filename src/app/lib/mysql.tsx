@@ -18,13 +18,13 @@ export default async function query(queryString: string, values: any[] = []): Pr
         password: process.env.DB_PASS!,
         database: process.env.DB_SCHEMA!,
         waitForConnections: true,
-        connectionLimit: 10,
-        queueLimit: 0
     });
 
     try {
         // Execute the query
         const [rows] = await dbConnection.execute(queryString, values);
+        console.log('Database is connected');
+
         return rows;
     } catch (error) {
         // Handle and log the error
