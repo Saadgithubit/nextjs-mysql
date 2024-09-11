@@ -3,7 +3,7 @@ import query from "@/app/lib/mysql";
 
 export async function GET(req: Request): Promise<NextResponse> {
     try {
-        const queryResult = await query("SELECT * FROM customers", []);
+        const queryResult = await query("SELECT * FROM users", []);
         return NextResponse.json(queryResult);
     } catch (error) {
         if (error instanceof Error) {
