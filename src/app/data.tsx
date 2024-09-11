@@ -8,6 +8,7 @@ export default function UsersData() {
     const [isEdit, setisEdit] = useState(false)
     const [userData, setuserData] = useState([])
     const [message, setmessage] = useState('')
+    const [editmessage, seteditmessage] = useState('')
     const [name, setname] = useState<string>('')
     const [email, setemail] = useState<string>('')
     const [password, setpassword] = useState<string>('')
@@ -52,6 +53,8 @@ export default function UsersData() {
 
     const edit = async (userId: number) => {
         const id = userId
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
         const postData = {
             method: 'PUT',
             headers: {
@@ -60,12 +63,13 @@ export default function UsersData() {
             body: JSON.stringify({
                 Name: name,
                 Email: email,
-                Password: password
+                Password: hashedPassword
             })
         }
         const res = await fetch(`${apiUrl}/api/users/${id}`, postData)
         const response = await res.json()
         console.log(response);
+        seteditmessage(response.message)
         setisEdit(false)
 
 
@@ -76,13 +80,13 @@ export default function UsersData() {
                 <div className="w-1/3 space-y-4">
                     <input
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setname(e.target.value)}
-                        className="w-full border-2 py-4" placeholder="Name" type="text" />
+                        className="w-full border-2 p-4" placeholder="Name" type="text" />
                     <input
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setemail(e.target.value)}
-                        className="w-full border-2 py-4" placeholder="Email" type="email" />
+                        className="w-full border-2 p-4" placeholder="Email" type="email" />
                     <input
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setpassword(e.target.value)}
-                        className="w-full border-2 py-4" placeholder="Password" type="password" />
+                        className="w-full border-2 p-4" placeholder="Password" type="password" />
                     {message && <p>{message}</p>}
                 </div>
                 <button onClick={submit} className="bg-blue-500 text-white rounded-lg px-8 py-4">Add User</button>
@@ -109,7 +113,7 @@ export default function UsersData() {
                                 <h1 className="text-xl font-bold">Password:</h1>
                                 <p>{Password}</p>
                             </div>
-                            {isEdit && <div className="space-y-3 border-2 p-4 relative">
+                            {isEdit === User_id && <div className="space-y-3 border-2 p-4 relative">
                                 <button onClick={() => setisEdit(false)} className="absolute top-3 right-3">
                                     <CancelIcon />
                                 </button>
@@ -127,7 +131,8 @@ export default function UsersData() {
                                 <button onClick={() => edit(User_id)} className="bg-blue-400 text-white px-12 py-2">Submit</button>
                             </div>}
                             <div className="flex justify-center gap-8">
-                                <button onClick={() => setisEdit(true)} className="bg-green-400 text-white px-8 py-2">Edit</button>
+                                {editmessage && <p>{editmessage}</p>}
+                                <button onClick={() => setisEdit(User_id)} className="bg-green-400 text-white px-8 py-2">Edit</button>
                                 <button className="bg-gray-500 text-white px-8 py-2">Delete</button>
                             </div>
                         </div>
