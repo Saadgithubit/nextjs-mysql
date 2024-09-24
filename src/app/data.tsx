@@ -7,8 +7,8 @@ import bcrypt from 'bcryptjs';
 export default function UsersData() {
     const [isEdit, setisEdit] = useState(false)
     const [userData, setuserData] = useState([])
-    const [message, setmessage] = useState('')
     const [editmessage, seteditmessage] = useState('')
+    const [message, setmessage] = useState('')
     const [name, setname] = useState<string>('')
     const [email, setemail] = useState<string>('')
     const [password, setpassword] = useState<string>('')
@@ -28,7 +28,7 @@ export default function UsersData() {
         }
 
         fetchData()
-    }, [])
+    }, [message,editmessage])
 
     const submit = async () => {
         const salt = await bcrypt.genSalt(10);

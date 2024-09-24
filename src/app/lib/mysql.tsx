@@ -1,15 +1,4 @@
 import mysql from 'mysql2/promise'
-import { NextResponse } from 'next/server'
-
-// const pool = mysql.createPool({
-//     host: process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASS,
-//     database: process.env.DB_SCHEMA,
-//     waitForConnections: true
-// })
-
-// export default pool
 
 export default async function query(queryString: string, values: any[] = []): Promise<any> {
     const dbConnection = mysql.createPool({

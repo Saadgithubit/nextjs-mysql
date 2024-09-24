@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migration:create": "dotenv -e .env sequelize-cli migration:create --name create-city-table",
+    "migrate": "dotenv -- sequelize-cli db:migrate",
+    "migrate:rollback": "dotenv -- sequelize-cli db:migrate:undo",
+    "migrate:rollback:all": "dotenv -- sequelize-cli db:migrate:undo:all"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -15,11 +19,15 @@
     "@mui/material": "^6.0.2",
     "@mui/styled-engine-sc": "^6.0.2",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.2",
     "mysql2": "^3.11.0",
     "next": "14.2.9",
     "next-auth": "^5.0.0-beta.20",
     "react": "^18",
     "react-dom": "^18",
+    "sequelize": "^6.37.3",
+    "sequelize-typescript": "^2.1.6",
     "styled-components": "^6.1.13",
     "zod": "^3.23.8"
   },
@@ -31,6 +39,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.9",
     "postcss": "^8",
+    "sequelize-cli": "^6.6.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
