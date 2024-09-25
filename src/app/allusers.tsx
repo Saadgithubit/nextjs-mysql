@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from "react"
 import CancelIcon from '@mui/icons-material/Cancel';
-import User from "@/models/Users";
+import Swal from 'sweetalert2'
 
 export default function AllUsers() {
     const [isEdit, setisEdit] = useState(false)
@@ -10,7 +10,6 @@ export default function AllUsers() {
     const [name, setname] = useState<string>('')
     const [message, setmessage] = useState('')
     const [editmessage, seteditmessage] = useState('')
-    const [addMessage, setaddMessage] = useState('')
     const [isFetch, setisFetch] = useState(true)
     const apiUrl = process.env.NEXT_PUBLIC_API_URL
     useEffect(() => {
@@ -48,11 +47,11 @@ export default function AllUsers() {
         }
         const res = await fetch(`${apiUrl}/api/users`, postData)
         const response = await res.json()
-        setaddMessage(response.message)
-        setTimeout(() => {
-
-            setaddMessage('')
-        }, 3000);
+        Swal.fire({
+            title: "Success!",
+            text: response.message,
+            icon: "success"
+        });
         setisFetch(true)
     }
 
@@ -71,9 +70,13 @@ export default function AllUsers() {
         const response = await res.json()
         console.log(response);
         seteditmessage(response.message)
+        Swal.fire({
+            title: "Success!",
+            text: response.message,
+            icon: "success"
+        });
+        setisEdit(false)
         setTimeout(() => {
-
-            setisEdit(false)
             seteditmessage('')
         }, 3000);
     }
@@ -89,6 +92,11 @@ export default function AllUsers() {
         const res = await fetch(`${apiUrl}/api/users/${id}`, postData)
         const response = await res.json()
         setisFetch(true)
+        Swal.fire({
+            title: "Success!",
+            text: response.message,
+            icon: "success"
+        });
         return response
     }
 
@@ -99,13 +107,17 @@ export default function AllUsers() {
                     <input
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setname(e.target.value)}
                         className="w-full border-2 p-4" value={name} placeholder="Name" type="text" />
-                    {addMessage && <p className="text-center font-semibold text-blue-500 text-xl">{addMessage}</p>}
                 </div>
                 <button onClick={addUser} className="bg-blue-500 text-white rounded-lg px-8 py-4">Add User</button>
             </div>
             <div>
                 {usersData.map((item) => {
                     const { id, name, create_at } = item
+                    const formattedDate = new Date(create_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    });
                     return (
                         <div key={id} className="w-1/2 mx-auto p-3 border-2 space-y-3 my-3">
                             <div className="flex gap-4 items-center">
@@ -118,7 +130,7 @@ export default function AllUsers() {
                             </div>
                             <div className="flex gap-4 items-center">
                                 <h1 className="text-xl font-bold">Register Date:</h1>
-                                <p>{create_at}</p>
+                                <p>{formattedDate}</p>
                             </div>
                             {isEdit === id && <div className="space-y-3 border-2 p-4 relative">
                                 <button onClick={() => setisEdit(false)} className="absolute top-3 right-3">
