@@ -1,9 +1,7 @@
-import AllUSers from "./allusers";
-import UsersData from "./data";
+import AllUsers from "./allusers";
 
 export default function Home() {
   return (
-    // <UsersData />
-    <AllUSers/>
+    <AllUsers />
   )
 }
